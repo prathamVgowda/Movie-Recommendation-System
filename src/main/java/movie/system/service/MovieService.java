@@ -10,7 +10,9 @@ public interface MovieService
 
 	public Movie createMovie(Movie movie);
 	
-	public List<Movie> getAllMovies();
+	public List<MovieDTO> getAllMovies();
+	
+	public List<Movie> getAllMoviess();
 	
 	public Movie getByIdMovie(Long movieId);
 	

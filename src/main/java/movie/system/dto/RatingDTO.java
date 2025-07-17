@@ -66,20 +66,20 @@ public class RatingDTO
 		this.review = review;
 	}
 	public RatingDTO(Rating rating) {
-	    this.ratingId = rating.getRatingId();
-	    this.rating = rating.getRating();
-	    this.review = rating.getReview();
+        this.ratingId = rating.getRatingId();
+        this.rating = rating.getRating();
+        this.review = rating.getReview();
 
-	    if (rating.getUser() != null) {
-	        this.userId = rating.getUser().getUserId();
-	        this.username = rating.getUser().getUsername();
-	    }
+        if (rating.getUser() != null) {
+            this.userId = rating.getUser().getUserId();
+            this.username = rating.getUser().getUsername();
+        }
 
-	    if (rating.getMovie() != null) {
-	        this.movieId = rating.getMovie().getMovieId();
-	        this.movieTitle = rating.getMovie().getTitle();
-	    }
-	}
-
+        if (rating.getMovie() != null) {
+            this.movieId = rating.getMovie().getMovieId();
+            this.movieTitle = rating.getMovie().getTitle();
+        }
+    }
+    
     
 }

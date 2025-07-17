@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,20 @@ public class MovieServiceImple implements MovieService
 	    return movieRepository.save(movie); 
 	}
 
+//	@Override
+//	public Movie createMovie(Movie movie) {
+//	    System.out.println("Looking for genre with ID: " + movie.getGenre().getGenerId());
+//	    Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
+//	            .orElseThrow(() -> {
+//	                System.err.println("Genre not found for ID: " + movie.getGenre().getGenerId());
+//	                return new RuntimeException("Genre not found");
+//	            });
+//
+//	    movie.setGenre(genre);
+//
+//	    return movieRepository.save(movie); 
+//	}
+	
 //	 public Movie createMovie(Movie movie) {
 //	        // Get the Genre based on the generId in the request
 //	        Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
@@ -52,7 +67,7 @@ public class MovieServiceImple implements MovieService
 //	{
 //		return movieRepository.save(movie) ;
 //	}
-
+	
 
 //	@Override
 //	public List<MovieDTO> getAllMovies() 
@@ -73,10 +88,33 @@ public class MovieServiceImple implements MovieService
 //		return movieDTOs;
 //	}
 
+	
+	public List<MovieDTO> getAllMovies() {
+	    List<Movie> movies = movieRepository.findAll(); // Fetch movies from repository
+
+	    List<MovieDTO> movieDTOs = movies.stream()
+	        .map(movie -> new MovieDTO(
+	            movie.getMovieId(),  // Include movieId
+	            movie.getTitle(),
+	            movie.getGenre(),
+	            movie.getReleaseYear(),
+	            movie.getDuration(),  // Include duration
+	            movie.getDirector(),
+	            movie.getDescription(),
+	            movie.getRatings() != null ? movie.getRatings().stream()
+	                .map(RatingDTO::new) // Convert ratings to RatingDTO
+	                .collect(Collectors.toSet()) : new HashSet<>() // Use HashSet instead of ArrayList
+	        ))
+	        .collect(Collectors.toList());
+
+	    return movieDTOs; // Ensure the return type is List<MovieDTO>
+	}
+	
 	@Override
-	public List<Movie> getAllMovies() 
+	public List<Movie> getAllMoviess()
 	{
-		return movieRepository.findAll();
+		 List<Movie> movies = movieRepository.findAll();
+		 return movies;
 	}
 	
 	@Override

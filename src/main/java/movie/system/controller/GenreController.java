@@ -18,7 +18,7 @@ import movie.system.entity.Genre;
 import movie.system.service.GenreService;
 
 @RestController
-@RequestMapping("/api/gener")
+@RequestMapping("/api/genre")
 public class GenreController 
 {
 	@Autowired
@@ -46,18 +46,17 @@ public class GenreController
 	}
 	
 	
-	
-	@PutMapping("/update/{generesId}")
-	public ResponseEntity<Genre> updateGeneres(@RequestBody Genre generes, @PathVariable Integer generesid)
+	@PutMapping("/update/{generId}")
+	public ResponseEntity<Genre> updateGeneres(@RequestBody Genre generes, @PathVariable Integer generId)
 	{
-		Genre genre = generesService.updateGenre(generesid, generes);
+		Genre genre = generesService.updateGenre(generId, generes);
 		return new ResponseEntity<Genre>(genre, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{generesId}")
-	public ResponseEntity<String> deletebygeneredId(@PathVariable Integer generesId)
+	public ResponseEntity<String> deletebygeneredId(@PathVariable Integer generId)
 	{
-		 generesService.deleteGenre(generesId);		
+		 generesService.deleteGenre(generId);		
 		return new ResponseEntity<String>("deleted Successfully", HttpStatus.OK);
 	}
 }

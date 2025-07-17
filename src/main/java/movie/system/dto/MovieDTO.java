@@ -20,6 +20,10 @@ public class MovieDTO
 			List<RatingDTO> collect) {
 		// TODO Auto-generated constructor stub
 	}
+	public MovieDTO(Long movieId2, String title2, Genre genre2, int releaseYear2, int duration2, String director2,
+			String description2, Object object) {
+		// TODO Auto-generated constructor stub
+	}
 	public Long getMovieId() {
 		return movieId;
 	}

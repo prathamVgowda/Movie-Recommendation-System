@@ -26,11 +26,17 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/get")
-    public ResponseEntity<List<Movie> > getAllMovies() {
-        List<Movie> movie= movieService.getAllMovies();
+    public ResponseEntity<List<MovieDTO> > getAllMovies() {
+        List<MovieDTO> movie= movieService.getAllMovies();
+        return new ResponseEntity<List<MovieDTO>>(movie, HttpStatus.OK);
+    }
+    
+    @GetMapping("/gets")
+    public ResponseEntity<List<Movie> > getAllMoviess() {
+        List<Movie> movie= movieService.getAllMoviess();
         return new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
     }
+
     
     @PostMapping("/post")
     public ResponseEntity<Movie> createMovie(@RequestBody Movie movie)

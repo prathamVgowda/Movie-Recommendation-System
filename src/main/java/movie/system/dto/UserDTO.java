@@ -4,7 +4,7 @@ import java.util.List;
 
 public class UserDTO 
 {
-private Long userId;
+	private Long userId;
     
     private String username;
     private String email;

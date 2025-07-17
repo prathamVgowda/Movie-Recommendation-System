@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,23 @@ public class UserServiceImple implements UserService
 	    return userDTOs;
 	}
 
+//	@Override
+//	public List<UserDTO> getAllUsers() {
+//	    List<User> users = userRepository.findAll();
+//	    List<UserDTO> userDTOs = users.stream()
+//	                                   .map(user -> new UserDTO(
+//	                                       user.getUserId(),
+//	                                       user.getUsername(),
+//	                                       user.getEmail(),
+//	                                       user.getPassword(),
+//	                                       user.getRatings().stream()
+//	                                           .map(rating -> new RatingDTO(rating))
+//	                                           .collect(Collectors.toList())
+//	                                   ))
+//	                                   .collect(Collectors.toList());
+//	    return userDTOs;
+//	}
+	
 	@Override
     public User saveUser(User user) {
         return userRepository.save(user);
