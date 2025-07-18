@@ -5,17 +5,15 @@ import movie.system.entity.Movie;
 public class RatingRequest 
 {
 
-	private UserDTO userId;   // user_id in the payload
-    private Long movieId;  // movie_id in the payload
-    private float rating;  // rating in the payload
+	private Long userId;
+    private Long movieId;
+    private float rating;
     private String review;
-    
-    
-	public UserDTO getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(UserDTO userDTO) {
-		this.userId = userDTO;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public Long getMovieId() {
 		return movieId;
@@ -35,10 +33,8 @@ public class RatingRequest
 	public void setReview(String review) {
 		this.review = review;
 	}
-	public void setMovieId(Movie movie) {
-		// TODO Auto-generated method stub
-		
-	}
     
+    
+	
     
 }

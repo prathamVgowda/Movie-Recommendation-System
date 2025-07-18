@@ -27,7 +27,7 @@ public class RatingController
 	private RatingService ratingservice;
 	
 	@PostMapping("/post")
-    public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
+	public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
         // your logic to create a rating
         Rating createdRating = ratingservice.createRating(rating);
         return new ResponseEntity<Rating>(createdRating, HttpStatus.CREATED);

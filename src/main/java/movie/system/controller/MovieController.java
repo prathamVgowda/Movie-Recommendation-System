@@ -26,6 +26,7 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @GetMapping("/get")
     public ResponseEntity<List<MovieDTO> > getAllMovies() {
         List<MovieDTO> movie= movieService.getAllMovies();
         return new ResponseEntity<List<MovieDTO>>(movie, HttpStatus.OK);

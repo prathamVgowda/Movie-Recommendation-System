@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,13 +67,13 @@ public class UserServiceImple implements UserService
 
 	@Override
 	public User getByIdUser(Long userId) {
-		User user= userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with the given ID not found", 404));
+		User user= userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with the given ID not found", 404, LocalDateTime.now()));
 		return user;
 	}
 
 	@Override
 	public User updateByUser(Long userId, User user) {
-		User user2 = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with the given ID not found", 404));
+		User user2 = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with the given ID not found", 404, LocalDateTime.now()));
 		user2.setUserId(user.getUserId());
 		user2.setEmail(user.getEmail());
 		user2.setUsername(user.getEmail());
@@ -86,7 +87,7 @@ public class UserServiceImple implements UserService
 	{
 		if (userRepository.existsById(userId))
 		{
-			throw new ResourceNotFoundException("User with the given ID not found", 404);
+			throw new ResourceNotFoundException("User with the given ID not found", 404, LocalDateTime.now());
 		}
 		userRepository.deleteById(userId);
 		return "Deleted"+ userId + " Sucessfully";

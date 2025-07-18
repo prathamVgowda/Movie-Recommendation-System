@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,6 @@ public class RatingServiceImple implements RatingService
 	    // Save the rating and return it
 	    return ratingRepository.save(rating);
 	}
-
 	
 	
 //	@Override
@@ -91,14 +91,14 @@ public class RatingServiceImple implements RatingService
 	@Override
 	public Rating getByIdRating(Long ratingId) 
 	{
-		Rating rating = ratingRepository.findById(ratingId).orElseThrow(() -> new ResourceNotFoundException("Rating with the given ID not found", 404));
+		Rating rating = ratingRepository.findById(ratingId).orElseThrow(() -> new ResourceNotFoundException("Rating with the given ID not found", 404,  LocalDateTime.now()));
 		return rating;
 	}
 
 	@Override
 	public Rating updateByRating(Long ratingId, Rating rating) 
 	{
-		Rating rating2= ratingRepository.findById(ratingId).orElseThrow(() -> new ResourceNotFoundException("Rating with the given ID not found", 404));
+		Rating rating2= ratingRepository.findById(ratingId).orElseThrow(() -> new ResourceNotFoundException("Rating with the given ID not found", 404,  LocalDateTime.now()));
 		rating2.setMovie(rating.getMovie());
 		rating2.setRating(rating.getRating());
 		rating2.setReview(rating.getReview());
@@ -112,7 +112,7 @@ public class RatingServiceImple implements RatingService
 	{
 		if(ratingRepository.existsById(ratingId))
 		{
-			throw new ResourceNotFoundException("Rating with the given ID not found", 404);
+			throw new ResourceNotFoundException("Rating with the given ID not found", 404,  LocalDateTime.now());
 		}
 		ratingRepository.deleteById(ratingId);
 		return "Deleted Successfully";

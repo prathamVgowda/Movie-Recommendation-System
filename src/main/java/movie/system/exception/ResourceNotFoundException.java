@@ -1,28 +1,26 @@
 package movie.system.exception;
 
+import java.time.LocalDateTime;
+
 public class ResourceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private int status;
+    private final int status;
+    private final LocalDateTime timestamp;
 
-    public ResourceNotFoundException(String message, int status) {
-        super(message);  
+    public ResourceNotFoundException(String message, int status, LocalDateTime timestamp) {
+        super(message); // Pass the message to RuntimeException
         this.status = status;
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage(); 
+        this.timestamp = timestamp;
     }
 
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
-
 
 }

@@ -27,7 +27,6 @@ public class Rating {
     private Long ratingId;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     

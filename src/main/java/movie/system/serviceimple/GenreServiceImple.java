@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,14 @@ public class GenreServiceImple implements GenreService
 	@Override
 	public Genre getByIdGenre(Integer genreId) {
 		System.out.println("Searching for Genre with ID: " + genreId);
-	    return genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Genre with the given ID not found", 404));
+	    return genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Genre with the given ID not found", 404, LocalDateTime.now()));
 	}
 
 
 	@Override
 	public Genre updateGenre(Integer genreId, Genre genre) 
 	{
-		Genre genres = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Genre with the given ID not found", 404));
+		Genre genres = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Genre with the given ID not found", 404, LocalDateTime.now()));
 		genres.setGenerId(genre.getGenerId());
 		genres.setGenre_name(genre.getGenre_name());
 		return genreRepository.save(genres);
@@ -51,7 +52,7 @@ public class GenreServiceImple implements GenreService
 	public String deleteGenre(Integer genreId) {
 	    if (!genreRepository.existsById(genreId)) 
 	    {
-	        throw new ResourceNotFoundException("Genre with the given ID not found", 404);
+	        throw new ResourceNotFoundException("Genre with the given ID not found", 404,  LocalDateTime.now());
 	    }
 	    genreRepository.deleteById(genreId);
 

@@ -1,5 +1,6 @@
 package movie.system.serviceimple;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,14 +121,14 @@ public class MovieServiceImple implements MovieService
 	@Override
 	public Movie getByIdMovie(Long movieId) {
 
-		Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404));
+		Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now()));
 		return movie;
 	}
 
 	@Override
 	public Movie updateByMovie(Long movieId, Movie movie) {
 
-		Movie movie2 = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404));
+		Movie movie2 = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now()));
 		movie2.setMovieId(movie.getMovieId());
 		movie2.setDirector(movie.getDirector());
 		movie2.setDescription(movie.getDescription());
@@ -143,7 +144,7 @@ public class MovieServiceImple implements MovieService
 	public String deletByMovie(Long movieId) {
 		if(movieRepository.existsById(movieId))
 		{
-			throw new ResourceNotFoundException("Movie with the given ID not found", 404);
+			throw new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now());
 		}
 
 		movieRepository.deleteById(movieId);
