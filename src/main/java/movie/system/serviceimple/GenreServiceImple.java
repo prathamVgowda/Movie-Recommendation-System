@@ -33,8 +33,8 @@ public class GenreServiceImple implements GenreService
 	}
 
 	@Override
-	public Genre getByIdGenre(Integer genreId) {
-		System.out.println("Searching for Genre with ID: " + genreId);
+	public Genre getByIdGenre(Integer genreId) 
+	{
 	    return genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Genre with the given ID not found", 404, LocalDateTime.now()));
 	}
 

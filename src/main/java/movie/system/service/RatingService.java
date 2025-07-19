@@ -10,7 +10,9 @@ public interface RatingService
 
 	public Rating createRating(Rating rating);
 	
-	public List<RatingDTO> getAllRating();
+	public List<RatingDTO> getAllRating(String user);
+	
+	List<RatingDTO> getRatingsSortedByRatingDesc();
 	
 	public Rating getByIdRating(Long ratingId);
 	

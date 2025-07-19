@@ -1,6 +1,5 @@
 package movie.system.dto;
 
-import movie.system.entity.Movie;
 
 public class RatingRequest 
 {

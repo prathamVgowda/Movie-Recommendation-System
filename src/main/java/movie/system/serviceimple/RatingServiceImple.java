@@ -31,49 +31,45 @@ public class RatingServiceImple implements RatingService
 	private UserRepository userRepository;
 	
 	@Override
-	public Rating createRating(Rating rating) {
-	    System.out.println("Looking for rating with ID: " + rating.getMovie().getMovieId());
-
-	    // Fetch the movie based on the movieId
+	public Rating createRating(Rating rating) 
+	{
 	    Movie movie = movieRepository.findById(rating.getMovie().getMovieId())
-	            .orElseThrow(() -> {
-	                System.err.println("Movie not found for ID: " + rating.getMovie().getMovieId());
-	                return new RuntimeException("Movie not found");
-	            });
+	            .orElseThrow(() -> { return new ResourceNotFoundException("Movie not found", 404,LocalDateTime.now()); });
 
-	    // Fetch the user based on the userId
 	    User user = userRepository.findById(rating.getUser().getUserId())
-	            .orElseThrow(() -> {
-	                System.err.println("User not found for ID: " + rating.getUser().getUserId());
-	                return new RuntimeException("User not found");
-	            });
-
-	    // Set the movie and user on the rating object
+	            .orElseThrow(() -> { return new ResourceNotFoundException("User not found", 404, LocalDateTime.now()); });
 	    rating.setMovie(movie);
 	    rating.setUser(user);
-
-	    // Save the rating and return it
 	    return ratingRepository.save(rating);
 	}
 	
 	
-//	@Override
-//	public Rating createRating(Rating rating) 
-//	{	
-//		Rating rating2 = ratingRepository.save(rating);
-//		return rating2;
-//	}
+	@Override
+	public List<RatingDTO> getRatingsSortedByRatingDesc() 
+	{
+	    List<Rating> ratings = ratingRepository.findAll();
 
-//	@Override
-//	public List<Rating> getAllRating() 
-//	{
-//		List<Rating> list = ratingRepository.findAll();
-//		return list;
-//	}
+	    return ratings.stream()
+	            .sorted((r1, r2) -> Double.compare(r2.getRating(), r1.getRating()))
+	            .map(rating -> new RatingDTO(
+	                    rating.getRatingId(),
+	                    rating.getUser().getUserId(),
+	                    rating.getUser().getUsername(),
+	                    rating.getMovie().getMovieId(),
+	                    rating.getMovie().getTitle(),
+	                    rating.getRating(),
+	                    rating.getReview()
+	            ))
+	            .collect(Collectors.toList());
+	}
+
 	
-	public List<RatingDTO> getAllRating() {
+	
+	public List<RatingDTO> getAllRating(String user) 
+	{
 	    List<Rating> ratings = ratingRepository.findAll();
 	    List<RatingDTO> ratingDTOs = ratings.stream()
+	    									.filter(rate -> user == null || user.isEmpty() || user.equalsIgnoreCase(rate.getUser().getUsername()))
 	                                         .map(rating -> new RatingDTO(
 	                                             rating.getRatingId(),
 	                                             rating.getUser().getUserId(),

@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import movie.system.dto.MovieDTO;
 import movie.system.entity.Movie;
-import movie.system.entity.Rating;
 import movie.system.service.MovieService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,16 +25,14 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/get")
-    public ResponseEntity<List<MovieDTO> > getAllMovies() {
-        List<MovieDTO> movie= movieService.getAllMovies();
-        return new ResponseEntity<List<MovieDTO>>(movie, HttpStatus.OK);
-    }
-    
     @GetMapping("/gets")
-    public ResponseEntity<List<Movie> > getAllMoviess() {
-        List<Movie> movie= movieService.getAllMoviess();
-        return new ResponseEntity<List<Movie>>(movie, HttpStatus.OK);
+    public ResponseEntity<List<Movie>> getAllMovies(
+    		@RequestParam(required = false) String genre, 
+    		@RequestParam(required = false) String title, 
+    		@RequestParam (required = false) Integer year) 
+    {
+        List<Movie> allMovies = movieService.getAllMovies(genre, title, year);
+        return new ResponseEntity<List<Movie>>(allMovies, HttpStatus.OK);
     }
 
     

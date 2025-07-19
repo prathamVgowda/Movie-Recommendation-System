@@ -1,15 +1,10 @@
 package movie.system.serviceimple;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import movie.system.dto.MovieDTO;
-import movie.system.dto.RatingDTO;
 import movie.system.entity.Genre;
 import movie.system.entity.Movie;
 import movie.system.exception.ResourceNotFoundException;
@@ -27,107 +22,38 @@ public class MovieServiceImple implements MovieService
     private GenreRepository generesRepository;
 
 	@Override
-	public Movie createMovie(Movie movie) {
-	    System.out.println("Looking for genre with ID: " + movie.getGenre().getGenerId());
+	public Movie createMovie(Movie movie) 
+	{
 	    Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
-	            .orElseThrow(() -> {
-	                System.err.println("Genre not found for ID: " + movie.getGenre().getGenerId());
-	                return new RuntimeException("Genre not found");
-	            });
-
+	            .orElseThrow(() -> {return new ResourceNotFoundException("Genre not found", 404, LocalDateTime.now());});
 	    movie.setGenre(genre);
 
 	    return movieRepository.save(movie); 
 	}
 
-//	@Override
-//	public Movie createMovie(Movie movie) {
-//	    System.out.println("Looking for genre with ID: " + movie.getGenre().getGenerId());
-//	    Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
-//	            .orElseThrow(() -> {
-//	                System.err.println("Genre not found for ID: " + movie.getGenre().getGenerId());
-//	                return new RuntimeException("Genre not found");
-//	            });
-//
-//	    movie.setGenre(genre);
-//
-//	    return movieRepository.save(movie); 
-//	}
-	
-//	 public Movie createMovie(Movie movie) {
-//	        // Get the Genre based on the generId in the request
-//	        Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
-//	                .orElseThrow(() -> new RuntimeException("Genre not found"));
-//
-//	        // Set the genre and save the movie
-//	        movie.setGenre(genre);
-//	        return movieRepository.save(movie);
-//	    }
-//	@Override
-//	public Movie createMovie(Movie movie) 
-//	{
-//		return movieRepository.save(movie) ;
-//	}
-	
-
-//	@Override
-//	public List<MovieDTO> getAllMovies() 
-//	{
-//		List<Movie> movies = movieRepository.findAll();
-//		List<MovieDTO> movieDTOs = movies.stream().map(movie -> new MovieDTO(
-//				movie.getMovieId(),
-//				movie.getTitle(),
-//				movie.getGenre(),
-//				movie.getReleaseYear(),
-//				movie.getDirector(),
-//				movie.getDescription(),
-//				movie.getRatings().stream()
-//                .map(rating -> new RatingDTO(rating))
-//                .collect(Collectors.toList())
-//				))
-//				.collect(Collectors.toList());
-//		return movieDTOs;
-//	}
-
-	
-	public List<MovieDTO> getAllMovies() {
-	    List<Movie> movies = movieRepository.findAll(); // Fetch movies from repository
-
-	    List<MovieDTO> movieDTOs = movies.stream()
-	        .map(movie -> new MovieDTO(
-	            movie.getMovieId(),  // Include movieId
-	            movie.getTitle(),
-	            movie.getGenre(),
-	            movie.getReleaseYear(),
-	            movie.getDuration(),  // Include duration
-	            movie.getDirector(),
-	            movie.getDescription(),
-	            movie.getRatings() != null ? movie.getRatings().stream()
-	                .map(RatingDTO::new) // Convert ratings to RatingDTO
-	                .collect(Collectors.toSet()) : new HashSet<>() // Use HashSet instead of ArrayList
-	        ))
-	        .collect(Collectors.toList());
-
-	    return movieDTOs; // Ensure the return type is List<MovieDTO>
-	}
 	
 	@Override
-	public List<Movie> getAllMoviess()
+	public List<Movie> getAllMovies(String genre, String title, Integer year) 
 	{
-		 List<Movie> movies = movieRepository.findAll();
-		 return movies;
+	    List<Movie> movies = movieRepository.findAll();
+	    return movies.stream()
+	        .filter(movie -> genre == null || genre.isEmpty() || genre.equalsIgnoreCase(movie.getGenre().getGenre_name()))
+	        .filter(movie -> title == null || title.isEmpty() || movie.getTitle().toLowerCase().contains(title.toLowerCase()))
+	        .filter(movie -> year == null || movie.getReleaseYear() == year)
+	        .toList();
 	}
+
 	
 	@Override
-	public Movie getByIdMovie(Long movieId) {
-
+	public Movie getByIdMovie(Long movieId) 
+	{
 		Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now()));
 		return movie;
 	}
 
 	@Override
-	public Movie updateByMovie(Long movieId, Movie movie) {
-
+	public Movie updateByMovie(Long movieId, Movie movie) 
+	{
 		Movie movie2 = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now()));
 		movie2.setMovieId(movie.getMovieId());
 		movie2.setDirector(movie.getDirector());
@@ -141,7 +67,8 @@ public class MovieServiceImple implements MovieService
 	}
 
 	@Override
-	public String deletByMovie(Long movieId) {
+	public String deletByMovie(Long movieId) 
+	{
 		if(movieRepository.existsById(movieId))
 		{
 			throw new ResourceNotFoundException("Movie with the given ID not found", 404,  LocalDateTime.now());

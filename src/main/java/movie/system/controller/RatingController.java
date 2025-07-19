@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import movie.system.dto.RatingDTO;
@@ -27,21 +28,29 @@ public class RatingController
 	private RatingService ratingservice;
 	
 	@PostMapping("/post")
-	public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
-        // your logic to create a rating
+	public ResponseEntity<Rating> createRating(@RequestBody Rating rating) 
+	{
         Rating createdRating = ratingservice.createRating(rating);
         return new ResponseEntity<Rating>(createdRating, HttpStatus.CREATED);
     }
 	
-	@GetMapping("/get")
-	public ResponseEntity< List<RatingDTO>> GetallRatings()
+	@GetMapping("/ratings/sorted")
+	public ResponseEntity<List<RatingDTO>> getRatingsSortedDesc() 
 	{
-		 List<RatingDTO> ratingDTOs= ratingservice.getAllRating();
+	    List<RatingDTO> sortedRatings = ratingservice.getRatingsSortedByRatingDesc();
+	    return ResponseEntity.ok(sortedRatings);
+	}
+	
+	@GetMapping("/get")
+	public ResponseEntity< List<RatingDTO>> GetallRatings(@RequestParam (required = false) String user)
+	{
+		 List<RatingDTO> ratingDTOs= ratingservice.getAllRating(user);
 		 return new ResponseEntity<List<RatingDTO>>(ratingDTOs, HttpStatus.OK);
 	}
 	
 	@GetMapping("/get/{ratingId}")
-	public ResponseEntity<RatingDTO> getbyRatingId(@PathVariable Long ratingId) {
+	public ResponseEntity<RatingDTO> getbyRatingId(@PathVariable Long ratingId) 
+	{
 	    Rating rating = ratingservice.getByIdRating(ratingId);
 	    RatingDTO dto = new RatingDTO(rating);
 	    return new ResponseEntity<>(dto, HttpStatus.OK);
