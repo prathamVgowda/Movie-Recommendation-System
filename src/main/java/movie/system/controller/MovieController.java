@@ -2,6 +2,9 @@ package movie.system.controller;
 
 import java.util.List;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,48 +23,59 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/auth/movies")
 public class MovieController {
+	
+    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+
+    
     @Autowired
     private MovieService movieService;
 
     @GetMapping("/gets")
     public ResponseEntity<List<Movie>> getAllMovies(
-    		@RequestParam(required = false) String genre, 
-    		@RequestParam(required = false) String title, 
-    		@RequestParam (required = false) Integer year) 
-    {
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Integer year) {
+
+        logger.info("Fetching movies with filters - Genre: {}, Title: {}, Year: {}", genre, title, year);
+	
         List<Movie> allMovies = movieService.getAllMovies(genre, title, year);
-        return new ResponseEntity<List<Movie>>(allMovies, HttpStatus.OK);
+        logger.debug("Fetched {} movies", allMovies.size());
+
+        return new ResponseEntity<>(allMovies, HttpStatus.OK);
     }
 
-    
     @PostMapping("/post")
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie)
-    {
-    	Movie movie2 = movieService.createMovie(movie);
-    	return new ResponseEntity<Movie>(movie2, HttpStatus.CREATED);
+    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
+        logger.info("Received request to create movie: {}", movie.getTitle());
+        Movie savedMovie = movieService.createMovie(movie);
+        logger.info("Movie created with ID: {}", savedMovie.getMovieId());
+        return new ResponseEntity<>(savedMovie, HttpStatus.CREATED);
     }
 
-    
     @GetMapping("/get/{movieId}")
-    public ResponseEntity<Movie> getByMovieI(@PathVariable Long movieId)
-    {
-    	Movie movie=  movieService.getByIdMovie(movieId);
-    	return new ResponseEntity<Movie>(movie, HttpStatus.OK);
+    public ResponseEntity<Movie> getByMovieId(@PathVariable Long movieId) {
+        logger.info("Fetching movie by ID: {}", movieId);
+        Movie movie = movieService.getByIdMovie(movieId);
+        logger.debug("Found movie: {}", movie.getTitle());
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
-    
+
     @PutMapping("/update/{movieId}")
-    public ResponseEntity<Movie> putMethodName(@PathVariable Movie movie, @RequestBody Long movieId) 
-    {
-    	Movie movie2 = movieService.updateByMovie(movieId, movie);
-    	return new ResponseEntity<Movie>(movie2, HttpStatus.OK);
+    public ResponseEntity<Movie> updateMovie(@PathVariable Long movieId, @RequestBody Movie movie) {
+        logger.info("Updating movie with ID: {}", movieId);
+        Movie updatedMovie = movieService.updateByMovie(movieId, movie);
+        logger.info("Movie updated: {}", updatedMovie.getTitle());
+        return new ResponseEntity<>(updatedMovie, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/delete/{movieId}")
-    public ResponseEntity<String> deleteById(Long movieId)
-    {
-    	 movieService.deletByMovie(movieId);
-    	 return new ResponseEntity<String>("Delted Sucessfully", HttpStatus.OK);
+    public ResponseEntity<String> deleteById(@PathVariable Long movieId) {
+        logger.info("Request to delete movie with ID: {}", movieId);
+        movieService.deletByMovie(movieId);
+        logger.info("Movie deleted with ID: {}", movieId);
+        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
     }
+
 }

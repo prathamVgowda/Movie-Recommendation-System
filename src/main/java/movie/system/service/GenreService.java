@@ -16,5 +16,7 @@ public interface GenreService
     public Genre updateGenre(Integer genreId, Genre genreDTO);
 
     public String deleteGenre(Integer genreId);
+    
+    public List<Genre> searbyGenrename(String genre_name);
 }
 

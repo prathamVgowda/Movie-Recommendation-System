@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import movie.system.entity.Genre;
 import movie.system.service.GenreService;
 
 @RestController
-@RequestMapping("/api/genre")
+@RequestMapping("/auth/genre")
 public class GenreController 
 {
 	@Autowired
@@ -59,4 +60,9 @@ public class GenreController
 		 generesService.deleteGenre(generId);		
 		return new ResponseEntity<String>("deleted Successfully", HttpStatus.OK);
 	}
+	
+	 @GetMapping("/search")
+	    public List<Genre> searchGenres(@RequestParam String genreName) {
+	        return generesService.searbyGenrename(genreName);
+	    }
 }

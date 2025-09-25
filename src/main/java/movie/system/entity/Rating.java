@@ -65,6 +65,14 @@ public class Rating {
 	public void setReview(String review) {
 		this.review = review;
 	}
+	@Override
+	public String toString() {
+		return "Rating [ratingId=" + ratingId + ", user=" + user + ", movie=" + movie + ", rating=" + rating
+				+ ", review=" + review + "]";
+	}
+	
+	
+	
     
     
 }

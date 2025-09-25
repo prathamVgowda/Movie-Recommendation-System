@@ -20,7 +20,7 @@ import movie.system.entity.Rating;
 import movie.system.service.RatingService;
 
 @RestController
-@RequestMapping("/api/rating")
+@RequestMapping("/auth/rating")
 public class RatingController 
 {
 

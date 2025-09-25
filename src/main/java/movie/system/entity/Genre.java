@@ -23,17 +23,17 @@ public class Genre {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int GenerId;
+    private int generId;
 
 	@Column(name = "genre_name", unique = true) 
     private String genre_name;
 
 	public int getGenerId() {
-		return GenerId;
+		return generId;
 	}
 
 	public void setGenerId(int generId) {
-		GenerId = generId;
+		generId = generId;
 	}
 
 	public String getGenre_name() {
