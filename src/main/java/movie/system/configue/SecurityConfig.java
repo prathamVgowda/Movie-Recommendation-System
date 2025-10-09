@@ -27,10 +27,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()      // Register/Login only
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()                 // All others need JWT
+        		.authorizeHttpRequests(auth -> auth
+        			    .requestMatchers("/auth/**").permitAll()      // Public: Register/Login
+        			    .requestMatchers("/admin/**").hasRole("ADMIN")// Role-based
+        			    .anyRequest().authenticated()                 // Everything else = token required
+              // All others need JWT
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authProvider())

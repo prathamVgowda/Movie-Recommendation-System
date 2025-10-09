@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import movie.system.dto.PaginatedResponse;
 import movie.system.dto.UserDTO;
 import movie.system.entity.User;
+import movie.system.repository.UserRepository;
+import movie.system.service.EmailService;
 import movie.system.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private EmailService emailService;
 
 //    @GetMapping("/get")
 //    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam (required = false) String use, @RequestParam (required = false) String search, @RequestParam(defaultValue = "1") int pageNumber,
@@ -67,5 +75,85 @@ public class UserController {
          userService.DeletByUser(userId);
         return new ResponseEntity<String>("Deleted Sucessfully", HttpStatus.OK);
     }
-        
+    
+    
+//    @PostMapping("/verify")
+//    public String verifyUser(@RequestParam String email, @RequestParam String code) {
+//        User user = userRepository.findByEmail(email);
+//
+//        if (user == null) {
+//            return "User not found";
+//        }
+//
+//        if (user.isVerified()) {
+//            return "User already verified";
+//        }
+//
+//        if (user.getVerificationCode().equals(code)) {
+//            user.setVerified(true);
+//            user.setVerificationCode(null); // Clear the code after success
+//            userRepository.save(user);
+//
+//            // Optionally send confirmation email
+//            emailService.sendRegistrationSuccessEmail(user.getEmail(), user.getUsername());
+//
+//            return "User verified and registered successfully!";
+//        } else {
+//            return "Invalid verification code";
+//        }
+//    }
+    
+    
+    @PostMapping("/verify")
+    public String verifyUser(@RequestParam String email, @RequestParam String code) {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            return "User not found.";
+        }
+
+        if (user.isVerified()) {
+            return "User already verified.";
+        }
+
+        if (user.getVerificationCode().equals(code)) {
+            user.setVerified(true);
+            user.setVerificationCode(null);
+            userRepository.save(user);
+
+            emailService.sendRegistrationSuccessEmail(user.getEmail(), user.getUsername());
+
+            return "User verified and registered successfully!";
+        } else {
+            return "Invalid verification code.";
+        }
+    }
+
+    
+    
+//    @PostMapping("/verify")
+//    public ResponseEntity<String> verifyUser(@RequestParam String mobileno, @RequestParam String code) {
+//        User user = userRepository.findByMobileno(mobileno);
+//
+//        if (user == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+//        }
+//
+//        if (user.isVerified()) {
+//            return ResponseEntity.ok("User already verified");
+//        }
+//
+//        if (user.getVerificationCode() != null && user.getVerificationCode().equals(code)) {
+//            user.setVerified(true);
+//            user.setVerificationCode(null); // Clear OTP after success
+//            userRepository.save(user);
+//
+//            return ResponseEntity.ok("User verified and registered successfully!");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid verification code");
+//        }
+//    }
+
+    
+          
 }

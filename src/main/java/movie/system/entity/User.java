@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,14 @@ public class User {
     private String email;
     private String password;
     private String roles;
+    
+    private String verificationCode;
+    private boolean verified = false;
+    
+    @NotBlank(message = "Mobile number is mandatory")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Mobile number must be 10 digits")
+    private String mobileno;
+
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -87,13 +97,49 @@ public class User {
 		this.roles = roles;
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", roles=" + roles + ", ratings=" + ratings + "]";
+	public String getVerificationCode() {
+		return verificationCode;
 	}
-	
-	
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
+	}
+
+	public String getMobileno() {
+		return mobileno;
+	}
+
+	public void setMobileno(String mobileno) {
+		this.mobileno = mobileno;
+	}
+
+	public User(Long userId, String username, String email, String password, String roles, String verificationCode,
+			boolean verified, String mobileno, Set<Rating> ratings) {
+		super();
+		this.userId = userId;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+		this.verificationCode = verificationCode;
+		this.verified = verified;
+		this.mobileno = mobileno;
+		this.ratings = ratings;
+	}
+
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	
     
     
