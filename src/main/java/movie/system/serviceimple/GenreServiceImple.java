@@ -29,7 +29,7 @@ public class GenreServiceImple implements GenreService
 	    public Genre createGenre(Genre genre) {
 	        logger.info("Creating new genre with name: {}", genre.getGenre_name());
 	        Genre savedGenre = genreRepository.save(genre);
-	        logger.info("Genre created successfully with ID: {}", savedGenre.getGenerId());
+	        logger.info("Genre created successfully with ID: {}", savedGenre.getGenreId());
 	        return savedGenre;
 	    }
 
@@ -61,10 +61,10 @@ public class GenreServiceImple implements GenreService
 	                    logger.error("Genre not found for update with ID: {}", genreId);
 	                    return new ResourceNotFoundException("Genre with the given ID not found", 404, LocalDateTime.now());
 	                });
-	        existingGenre.setGenerId(genre.getGenerId());
+	        existingGenre.setGenreId(genre.getGenreId());
 	        existingGenre.setGenre_name(genre.getGenre_name());
 	        Genre updatedGenre = genreRepository.save(existingGenre);
-	        logger.info("Genre updated successfully with ID: {}", updatedGenre.getGenerId());
+	        logger.info("Genre updated successfully with ID: {}", updatedGenre.getGenreId());
 	        return updatedGenre;
 	    }
 

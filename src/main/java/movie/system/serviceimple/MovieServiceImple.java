@@ -27,14 +27,14 @@ public class MovieServiceImple implements MovieService
 
 	
 	@Override
-    public Movie createMovie(Movie movie) {
-        logger.info("Creating a movie with title: {}", movie.getTitle());
-        Genre genre = generesRepository.findById(movie.getGenre().getGenerId())
-                .orElseThrow(() -> {
-                    logger.error("Genre not found with ID: {}", movie.getGenre().getGenerId());
-                    return new ResourceNotFoundException("Genre not found", 404, LocalDateTime.now());
-                });
+    public Movie createMovie(Movie movie) 
+	{
+		Genre genre = generesRepository.findById(movie.getGenre().getGenreId()).orElseThrow(() -> {
+		    logger.error("Genre not found with ID: {}", movie.getGenre().getGenreId());
+		    return new ResourceNotFoundException("Genre not found", 404, LocalDateTime.now());
+		});
 
+        
         movie.setGenre(genre);
         Movie savedMovie = movieRepository.save(movie);
         logger.info("Movie created successfully with ID: {}", savedMovie.getMovieId());

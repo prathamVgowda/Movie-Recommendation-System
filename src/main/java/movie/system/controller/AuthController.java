@@ -82,7 +82,8 @@ public class AuthController {
 //    }
     
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<String> register(@RequestBody User user) 
+    {
         if (!isValidEmail(user.getEmail())) {
             return ResponseEntity.badRequest().body("Invalid email format.");
         }

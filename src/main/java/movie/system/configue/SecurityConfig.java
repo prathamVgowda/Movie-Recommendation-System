@@ -28,7 +28,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
         		.authorizeHttpRequests(auth -> auth
-        			    .requestMatchers("/auth/**").permitAll()      // Public: Register/Login
+//        			    .requestMatchers("/auth/**").permitAll()      // Public: Register/Login
+        				.requestMatchers("/auth/login", "/auth/register", "auth/users/verify").permitAll()
         			    .requestMatchers("/admin/**").hasRole("ADMIN")// Role-based
         			    .anyRequest().authenticated()                 // Everything else = token required
               // All others need JWT
