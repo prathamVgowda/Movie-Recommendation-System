@@ -16,6 +16,7 @@ public interface MovieService
 	public Movie updateByMovie(Long movieId, Movie movie);
 	
 	public String deletByMovie(Long movieId);
-
+	
+	
 	
 }
