@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import movie.system.dto.PaginatedResponse;
 import movie.system.dto.UserDTO;
 import movie.system.entity.User;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/auth/users")
+@Tag(name = "Movie Recommendation System", description = "APIs for managing Movie Recommendation System")
 public class UserController {
     @Autowired
     private UserService userService;

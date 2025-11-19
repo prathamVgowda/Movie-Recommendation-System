@@ -29,7 +29,7 @@ public class SecurityConfig {
         return http.csrf().disable()
         		.authorizeHttpRequests(auth -> auth
 //        			    .requestMatchers("/auth/**").permitAll()      // Public: Register/Login
-        				.requestMatchers("/auth/login", "/auth/register", "auth/users/verify").permitAll()
+        				.requestMatchers("/auth/login", "/auth/register", "auth/users/verify", "/v3/api-docs/**", "swagger-ui/**", "/swagger-ui.html").permitAll()
         			    .requestMatchers("/admin/**").hasRole("ADMIN")// Role-based
         			    .anyRequest().authenticated()                 // Everything else = token required
               // All others need JWT
