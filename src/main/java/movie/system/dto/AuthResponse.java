@@ -1,20 +1,30 @@
 package movie.system.dto;
 
-
 public class AuthResponse {
-    private String jwt;
 
-    // Constructor
-    public AuthResponse(String jwt) {
-        this.jwt = jwt;
+    private String accessToken;
+    private String refreshToken;
+
+    public AuthResponse() {}
+
+    public AuthResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
-    // Getter
-    public String getJwt() {
-        return jwt;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Movie Recommendaton System API")
                         .version("1.0")
-                        .description("API documentation for Student management"));
+                        .description("API documentation for Movie Recommendaton System management"));
     }
 }

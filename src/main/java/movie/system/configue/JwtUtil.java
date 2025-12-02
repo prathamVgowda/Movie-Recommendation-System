@@ -2,40 +2,76 @@ package movie.system.configue;
 
 import java.util.Date;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtil {
 
-	private String secret = "VGhpcy1pcy1hLXNlY3VyZS1qd3Qtc2VjcmV0LWtleS0yNTY=";
+    private final String secret = "VGhpcy1pcy1hLXNlY3VyZS1qd3Qtc2VjcmV0LWtleS0yNTY=";
 
-    public String generateToken(String username) {
+    // ===============================
+    // Generate Access Token (15 min)
+    // ===============================
+    public String generateAccessToken(String username) {
         return Jwts.builder()
-            .setSubject(username)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-            .signWith(SignatureAlgorithm.HS256, secret)
-            .compact();
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 min
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
+    // ===============================
+    // Generate Refresh Token (7 days)
+    // ===============================
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 3 * 60 * 60 * 1000)) // 3 hours	
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    // ===============================
+    // Extract username from token
+    // ===============================
     public String extractUsername(String token) {
-        return Jwts.parser().setSigningKey(secret)
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+        return getClaims(token).getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+    // ===============================
+    // Extract expiration
+    // ===============================
+    public Date extractExpiration(String token) {
+        return getClaims(token).getExpiration();
     }
 
-    private boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parser().setSigningKey(secret)
-            .parseClaimsJws(token).getBody().getExpiration();
-        return expiration.before(new Date());
+    // ===============================
+    // Check if token is expired
+    // ===============================
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    // ===============================
+    // Validate token (for refresh token use)
+    // ===============================
+    public boolean validateToken(String token, String username) {
+        return extractUsername(token).equals(username) && !isTokenExpired(token);
+    }
+
+    // ===============================
+    // Get Claims
+    // ===============================
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

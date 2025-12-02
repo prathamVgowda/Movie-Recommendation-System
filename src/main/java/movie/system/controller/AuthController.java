@@ -3,6 +3,7 @@ package movie.system.controller;
 import movie.system.configue.JwtUtil;
 import movie.system.dto.AuthRequest;
 import movie.system.dto.AuthResponse;
+import movie.system.dto.RefreshTokenRequest;
 import movie.system.entity.User;
 import movie.system.repository.UserRepository;
 import movie.system.service.EmailService;
@@ -176,9 +177,12 @@ public class AuthController {
             );
 
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            String token = jwtUtil.generateToken(userDetails.getUsername());
+            String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername());
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
-            return ResponseEntity.ok(new AuthResponse(token));
+            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+
+
         } catch (BadCredentialsException ex) {
             System.out.println("Invalid credentials!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
@@ -190,5 +194,26 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed: " + ex.getMessage());
         }
     }
+    
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        try {
+            String refreshToken = request.getRefreshToken();
+            String username = jwtUtil.extractUsername(refreshToken);
+
+            // validate
+            if (!jwtUtil.validateToken(refreshToken, username)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+            }
+
+            String newAccessToken = jwtUtil.generateAccessToken(username);
+
+            return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshToken));
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Expired or invalid refresh token");
+        }
+    }
+
 
 }
